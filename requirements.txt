@@ -1,0 +1,21 @@
+streamlit>=1.32
+plotly>=5.20
+pandas>=2.1
+numpy>=1.26
+matplotlib>=3.8
+gym==0.26.2
+streamlit-option-menu>=0.3.12
+streamlit-extras>=0.4.2
+# Data ingestion
+openpyxl>=3.1
+# Forecasting
+statsmodels>=0.14
+scipy>=1.11
+scikit-learn>=1.4
+# Optional (graceful fallback if missing)
+prophet>=1.1.5
+# AI insights (optional — set OPENAI_API_KEY or GEMINI_API_KEY)
+openai>=1.40
+google-generativeai>=0.7
+# Exports
+reportlab>=4.0

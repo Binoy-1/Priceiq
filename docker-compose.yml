@@ -1,0 +1,28 @@
+# PriceIQ — local orchestration
+services:
+  priceiq:
+    build: .
+    image: priceiq:latest
+    container_name: priceiq
+    ports:
+      - "8501:8501"
+    environment:
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+    volumes:
+      # Live-reload code changes during development.
+      # Comment these out for an immutable production-style run.
+      - ./app_pages:/app/app_pages
+      - ./utils:/app/utils
+      - ./assets:/app/assets
+      - ./.streamlit:/app/.streamlit
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
