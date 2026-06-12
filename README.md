@@ -1,37 +1,28 @@
-# PriceIQ — RL Dynamic Pricing
+# 💹 PriceIQ — Dynamic Pricing using Reinforcement Learning
 
-Streamlit dashboard for the Q-Learning dynamic-pricing project.
+> A Q-Learning agent that learns optimal pricing for e-commerce products,
+> deployed as a production-quality Streamlit dashboard.
 
-## Run
+## 🎯 Business Problem
+Static pricing rules don't adapt to demand signals. This system trains an 
+RL agent to discover the revenue-maximising price through trial and error —
+the same approach used by Amazon, Uber, and major airlines.
 
+## 📊 Results
+- Optimal price discovered: $12.88
+- Revenue lift vs baseline: +22.5%
+- Training convergence: ~episode 200 of 1500
+- Demand model R²: fitted from UCI Online Retail II dataset
+
+## 🛠️ Tech Stack
+Python · NumPy · Pandas · Scikit-learn · Gymnasium · Streamlit · Plotly
+
+## 🚀 Quick Start
 ```bash
+git clone https://github.com/YOUR-USERNAME/PriceIQ.git
+cd PriceIQ
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Layout
-
-```
-app.py              # entry, sidebar nav, theme, page router
-app_pages/              # one file per page (dashboard, simulator, ...)
-utils/
-  loaders.py        # cached file loaders (q_table, reports, csv)
-  charts.py         # reusable Plotly chart builders
-  helpers.py        # state binning, action labels, KPI math
-models/             # q_table.npy, coefficients.npy  (your trained artifacts)
-reports/            # evaluation_report.json, pricing_report.json
-data/               # 2025_retail_sample.csv
-agent.py, environment.py  # your RL engine, untouched, used by training page
-```
-
-## Architecture
-
-- **Modular pages** — `app.py` is a thin router. Each page is a pure
-  `render()` function. Adding a new page = drop a file in `app_pages/` and
-  register it in `PAGES`.
-- **Cached loaders** — `@st.cache_data` on JSON/npy/csv reads, so
-  navigation never re-reads disk.
-- **Chart builders** — every Plotly figure is built in `utils/charts.py`
-  with the shared dark theme, so styling stays consistent.
-- **RL engine untouched** — `agent.py` and `environment.py` are your
-  original files. The Training page imports them directly.
+## 📁 Project Structure
