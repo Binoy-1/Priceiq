@@ -1,0 +1,20 @@
+{
+  "evaluation": {
+    "mean_reward": 0.3112281317972375,
+    "std_reward": 0.10209783162695525,
+    "mean_price": 14.019583333333333,
+    "mean_demand": 0.43655521598275715,
+    "zero_reward_count": 548
+  },
+  "baseline": {
+    "learned_mean_price": 14.019583333333333,
+    "fixed_optimal_price": 1.0,
+    "fixed_optimal_expected_revenue": 6.741771209615995
+  },
+  "pathologies": {
+    "issues": [
+      "\u26a0 Unused actions: [570   0 630]"
+    ],
+    "has_issues": true
+  }
+}

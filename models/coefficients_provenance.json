@@ -1,0 +1,18 @@
+{
+  "source_file": "data\\test_retail_data.csv",
+  "price_col": "price",
+  "quantity_col": "quantity",
+  "revenue_col": "revenue",
+  "n": 1825,
+  "a_intercept": 4.655028036536737,
+  "b_slope_elasticity": -0.8910226830462243,
+  "r_squared": 0.6786506455533721,
+  "price_range": [
+    12.01,
+    143.97
+  ],
+  "qty_range": [
+    1.0,
+    20.0
+  ]
+}
