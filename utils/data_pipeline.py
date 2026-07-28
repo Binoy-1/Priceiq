@@ -44,6 +44,23 @@ class CleaningReport:
 
 # ─── Loading ────────────────────────────────────────────────────────────
 
+def _fix_mixed_object_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Cast object columns with mixed Python types (e.g. int + str, as in
+    UCI-style StockCode fields like '85123A' and 20679) to plain strings.
+
+    Streamlit's Arrow serializer chokes on object columns holding more than
+    one underlying type, so this normalizes them right after load — before
+    any st.dataframe() call ever sees them. Numeric-only object columns are
+    left alone so real numbers still display/sort as numbers.
+    """
+    for col in df.columns:
+        if df[col].dtype == object:
+            types = df[col].dropna().map(type).unique()
+            if len(types) > 1:
+                df[col] = df[col].astype(str)
+    return df
+
+
 def read_uploaded(file) -> pd.DataFrame:
     """Load a Streamlit UploadedFile (CSV / XLSX / JSON) into a DataFrame."""
     name = getattr(file, "name", "uploaded").lower()
@@ -51,31 +68,30 @@ def read_uploaded(file) -> pd.DataFrame:
     bio = BytesIO(raw if isinstance(raw, (bytes, bytearray)) else raw.encode())
 
     if name.endswith((".xlsx", ".xls")):
-        return pd.read_excel(bio)
+        return _fix_mixed_object_columns(pd.read_excel(bio))
     if name.endswith(".json"):
         bio.seek(0)
         try:
-            return pd.read_json(bio)
+            return _fix_mixed_object_columns(pd.read_json(bio))
         except ValueError:
             bio.seek(0)
             data = json.load(bio)
             if isinstance(data, dict):
                 for k, v in data.items():
                     if isinstance(v, list):
-                        return pd.DataFrame(v)
-            return pd.json_normalize(data)
+                        return _fix_mixed_object_columns(pd.DataFrame(v))
+            return _fix_mixed_object_columns(pd.json_normalize(data))
     # default: CSV — try a few separators
     for sep in [",", ";", "\t", "|"]:
         bio.seek(0)
         try:
             df = pd.read_csv(bio, sep=sep, engine="python")
             if df.shape[1] > 1:
-                return df
+                return _fix_mixed_object_columns(df)
         except Exception:
             continue
     bio.seek(0)
-    return pd.read_csv(bio)
-
+    return _fix_mixed_object_columns(pd.read_csv(bio))
 
 # ─── Schema detection ───────────────────────────────────────────────────
 
